@@ -26,9 +26,9 @@ class BeforeWriteLogEvent
      * @param object $log    Log model
      * @param array  $recode Log recode
      */
-    public function __construct($log, array $recode)
+    public function __construct(&$log, array $recode)
     {
-        $this->log = $log;
+        $this->log = &$log;
         $this->recode = $recode;
     }
 }

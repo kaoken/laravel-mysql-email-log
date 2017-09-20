@@ -2,7 +2,7 @@
 /**
  * Mail send limit exceeded
  */
-namespace Kaoken\LaravelConfirmation\Mail;
+namespace Kaoken\LaravelMysqlEmailLog\Mail;
 
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -35,7 +35,7 @@ class SendLimitMailToAdmin extends Mailable
     {
         $config = app()['config']["app.mysql_log"];
 
-        return $this->text('vendor.mysql_email_log.over_limit')
+        return $this->view('vendor.mysql_email_log.over_limit')
             ->subject(env('APP_NAME').' - Log mail send limit exceeded. ['.$this->log->level_name.']')
             ->to($config['to'], 'Admin')
             ->with(['log'=>$this->log, 'config'=>$config]);

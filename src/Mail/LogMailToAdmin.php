@@ -1,6 +1,6 @@
 <?php
 
-namespace Kaoken\LaravelConfirmation\Mail;
+namespace Kaoken\LaravelMysqlEmailLog\Mail;
 
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -34,7 +34,7 @@ class LogMailToAdmin extends Mailable
     {
         $config = app()['config']["app.mysql_log"];
 
-        return $this->text('vendor.mysql_email_log.log')
+        return $this->view('vendor.mysql_email_log.log')
             ->subject(env('APP_NAME').' - Log ['.$this->log->level_name.']')
             ->to($config['to'], 'Admin')
             ->with(['log'=>$this->log, 'config'=>$config]);

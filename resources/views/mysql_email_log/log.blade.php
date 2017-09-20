@@ -1,83 +1,78 @@
+@php
+    $cssClass = "text-secondary";
+    if( $log->level >= 400)
+        $cssClass = "text-danger";
+    else if( $log->level >= 300)
+        $cssClass = "text-warning";
+    else if( $log->level >= 200)
+        $cssClass = "text-info";
+    $o = $log->getJsonDecodeData();
+    $context="";
+    if( array_key_exists('exception', $o) && array_key_exists('xdebug_message', $o['exception'])){
+        $context = $o['exception']['xdebug_message'];
+        if( preg_match("/^\n/", $context)){
+            $context = nl2br(html_entity_decode($context));
+        }else if(preg_match("/^</", $context)){
+            ;
+        }else{
+            $context = nl2br(html_entity_decode($context));
+        }
+    }else{
+        $context = '<table class="table table-striped table-sm">';
+        $context .= '<tbody>';
+        foreach ($o as $key=>$value) {
+            $context.='<tr><th>'.$key.'</th>';
+             if( is_array($value) || is_object($value))
+                $value = json_encode($value);
+           $context.= '<td>'.nl2br(html_entity_decode($value)).'</td></tr>';
+        }
+        $context .= '</tbody></table>';
+    }
+@endphp
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{app()->getLocale()}}">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Styles -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" rel="stylesheet">
-</head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"></head>
 <body>
 <div class="container">
-    <div class="row">
-        @php
-            $cssClass = "text-secondary";
-            if( $log->level >= 400)
-                $cssClass = "text-danger";
-            else if( $log->level >= 300)
-                $cssClass = "text-warning";
-            else if( $log->level >= 200)
-                $cssClass = "text-info";
-        @endphp
-        <h1 class="{{$cssClass}}">{{$log->level_name}}</h1>
-        <table class="table table-striped table-sm">
-            <tbody>
-            <tr>
-                <th>Date</th>
-                <td>{{$log->create_tm}}</td>
-                <th>PID</th>
-                <td>{{$log->pid}}</td>
-                <th>IP</th>
-                <td>{{$log->ip}}<br />{{@gethostbyaddr($log->ip)}}</td>
-                <th>Method</th>
-                <td>{{$log->method}}</td>
-            </tr>
-            @if(!empty($log->route))
+    <h1 class="{{$cssClass}}">{{$log->level_name}}</h1>
+    <table class="table table-striped table-sm">
+        <tbody>
+        <tr>
+            <th>Date</th>
+            <td>{{$log->create_tm}}</td>
+            <th>PID</th>
+            <td>{{$log->pid}}</td>
+            <th>IP</th>
+            <td>{{$log->ip}}<br />{{@gethostbyaddr($log->ip)}}</td>
+            <th>HTTP request mthod</th>
+            <td>{{$log->method}}</td>
+        </tr>
+        @if(!empty($log->route))
             <tr>
                 <th>Route</th>
-                <td colspan="6">{{$log->route}}</td>
+                <td colspan="7">{{$log->route}}</td>
             </tr>
-            @else
-            @if(!empty($log->user_agent))
+        @endif
+        @if(!empty($log->user_agent))
             <tr>
                 <th>User Agent</th>
-                <td colspan="6">{{$log->user_agent}}</td>
+                <td colspan="7">{{$log->user_agent}}</td>
             </tr>
-            @else
-            <tr>
-                <th>Message</th>
-                <td colspan="6">{{$log->message}}</td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="card" style="width: 20rem;">
-            <div class="card-header">
-                Context
-            </div>
-            <div class="card-body">
-                @php
-                    $o = $log->getJsonDecodeData();
-                    $context="";
-                    if( isset($o['exception']) && isset($o['exception']['xdebug_message'])){
-                        $context = $o['exception']['xdebug_message'];
-                        if( preg_match("/^\n/", $context)){
-                            $context = nl2br(html_entity_decode($context));
-                        }else if(preg_match("/^</", $context)){
-                            ;
-                        }else{
-                            $context = nl2br(html_entity_decode($context));
-                        }
-                    }else{
-                        $context = '<table class="table table-striped table-sm">';
-                        $context += '<tbody>';
-                        foreach ($o as $key=>$value) {
-                            $context+='<tr><th>'.$key.'</th>';
-                            $context+= '<td>'.nl2br(html_entity_decode($value)).'</td></tr>';
-                        }
-                        $context += '</tbody>';
-                    }
-                @endphp
-                {!! $context !!}
-            </div>
+        @endif
+        <tr>
+            <th>Message</th>
+            <td colspan="7">{{$log->message}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="card">
+        <div class="card-header"><h3>Context</h3></div>
+        <div class="card-body">
+            {!! $context !!}
         </div>
     </div>
 </div>

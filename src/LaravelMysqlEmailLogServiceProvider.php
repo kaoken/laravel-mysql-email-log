@@ -10,7 +10,7 @@ class LaravelMysqlEmailLogServiceProvider extends ServiceProvider
      *
      * @var bool
      */
-    protected $defer = false;
+    protected $defer = true;
 
     /**
      * The basic path of the library here.
@@ -41,7 +41,7 @@ class LaravelMysqlEmailLogServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                $this->my_resources_path('views') => resource_path('views/vendor/confirmation'),
+                $this->my_resources_path('views') => resource_path('views/vendor'),
                 $this->my_base_path('database/migrations') => database_path('migrations'),
             ], 'mysql_email_log');
         }
@@ -53,10 +53,8 @@ class LaravelMysqlEmailLogServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $app = $this->app;
-
-        $this->app->configureMonologUsing(function($monolog) use($app) {
-            $monolog->setHandler(new LaravelMysqlEmailLogHandler());
+        $this->app->configureMonologUsing(function($monolog) {
+            $monolog->setHandlers([new LaravelMysqlEmailLogHandler()]);
             //$monolog->pushHandler(new LaravelMysqlEmailLogHandler());
         });
     }

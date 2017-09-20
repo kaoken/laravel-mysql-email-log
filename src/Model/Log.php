@@ -32,7 +32,7 @@ class Log extends Model
     public function &getJsonDecodeData()
     {
         if($this->jsonDecodeData===null)
-            $this->jsonDecodeData = json_decode($this->context);
+            $this->jsonDecodeData = json_decode($this->context,true);
         return $this->jsonDecodeData;
     }
 }

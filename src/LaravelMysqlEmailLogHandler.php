@@ -1,14 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: yasuk
- * Date: 2017/09/19
- * Time: 17:54
- */
-
 namespace Kaoken\LaravelMysqlEmailLog;
 
 use Kaoken\LaravelMysqlEmailLog\Events\BeforeWriteLogEvent;
+use Carbon\Carbon;
 use Mail;
 use Monolog\Logger;
 use Monolog\Handler\AbstractProcessingHandler;
@@ -53,18 +47,20 @@ class LaravelMysqlEmailLogHandler extends AbstractProcessingHandler
         }
 
         if( count($record['context']) == 0 && !$isLocal ){
-            $context_json = json_encode([$record['method']=>Request::all()]);
+            $context_json = json_encode([$record['method']=>request()->all()]);
         }else{
             $context_json = json_encode($record['context']);
         }
 
-        $log = new Log();
+        $clLog = $config['model'];
+        $log = new $clLog();
 
         event(new BeforeWriteLogEvent($log,$record));
         $log->user_agent  = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT']:"";
         $log->create_tm = $record['datetime']->format( 'Y-m-d H:i:s.u' );
         $log->pid = $record['pid'];
         $log->ip = $record['ip'];
+        $log->level = $record['level'];
         $log->level_name = $record['level_name'];
         $log->route = $record['route'];
         $log->method = $record['method'];
@@ -74,29 +70,28 @@ class LaravelMysqlEmailLogHandler extends AbstractProcessingHandler
         $log->save();
 
 
+        $lv = 'ERROR';
+        if( !isset($config['email_send_level']) ) $lv = strtoupper($config['email_send_level']);
+        if( !array_key_exists($lv,$this->levels))$lv = 'ERROR';
 
-        if( $this->levels[env('LOG_EMAIL_LEVEL')] <= $record['level']){
-            $aIn=[];
-            foreach($this->levels as $key => $val){
-                if($record['level'] <= $val ) $aIn[] = $key;
-            }
-
+        if( $this->levels[$lv] <= $record['level']){
             // Acquisition of the number of send email of today
-            $cnt = 0;
-            if(count($aIn)>0){
-                $t = Carbon::now()->format('Y-m-d');
-                $cnt = Log::where('create_tm','>=', Carbon::now()->format('Y-m-d'))
-                    ->where('create_tm','<', Carbon::now()->addDay()->format('Y-m-d'))
-                    ->whereIn('level_name',$aIn)
-                    ->count();
-            }
+            $t = Carbon::now()->format('Y-m-d');
+            $cnt = ($clLog)::where('create_tm','>=', Carbon::now()->format('Y-m-d'))
+                ->where('create_tm','<', Carbon::now()->addDay()->format('Y-m-d'))
+                ->where('level','>=',$record['level'])
+                ->count();
 
-            $clLog = $config['email_log'];
-            $clLimit = $config['email_send_limit'];
-            if($cnt <= env('LOG_DAY_SEND_MAIL'))
-                Mail::send(new $clLog($log));
-            else if( $cnt === env('LOG_DAY_SEND_MAIL')+1) {
-                Mail::send(new $clLimit($log));
+            $clMailLog = $config['email_log'];
+            $clMailLimit = $config['email_send_limit'];
+
+            $limit = 64;
+            if( isset($config['max_email_send_count']) && is_int($config['max_email_send_count'])) $limit = $config['max_email_send_count'];
+
+            if($cnt <= $limit)
+                Mail::send(new $clMailLog($log));
+            else if( $cnt === $limit+1) {
+                Mail::send(new $clMailLimit($log));
             }
         }
     }
