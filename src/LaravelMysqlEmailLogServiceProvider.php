@@ -6,13 +6,6 @@ use Illuminate\Support\ServiceProvider;
 class LaravelMysqlEmailLogServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = true;
-
-    /**
      * The basic path of the library here.
      * @param string $path
      * @return string
@@ -43,7 +36,7 @@ class LaravelMysqlEmailLogServiceProvider extends ServiceProvider
             $this->publishes([
                 $this->my_resources_path('views') => resource_path('views/vendor'),
                 $this->my_base_path('database/migrations') => database_path('migrations'),
-            ], 'mysql_email_log');
+            ], 'mysql-email-log');
         }
     }
     /**

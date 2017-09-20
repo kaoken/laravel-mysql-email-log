@@ -2,9 +2,9 @@
 Save logs handled by Laravel in Mysql, and send mail when it is over specified level.
 
 [![Travis](https://img.shields.io/travis/rust-lang/rust.svg)]()
-[![composer version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/kaoken/laravel-confirmation-email)
-[![licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/kaoken/laravel-confirmation-email)
-[![laravel version](https://img.shields.io/badge/Laravel%20version-≧5.5-red.svg)](https://github.com/kaoken/laravel-confirmation-email)
+[![composer version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
+[![licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
+[![laravel version](https://img.shields.io/badge/Laravel%20version-≧5.5-red.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 
 
 
@@ -126,7 +126,7 @@ It is good to add it under the `'log_level' => env('APP_LOG_LEVEL', 'debug'),` o
 
 ### Command
 ```bash
-php artisan vendor:publish --tag=mysql_email_log
+php artisan vendor:publish --tag=mysql-email-log
 ```
   
 After execution, the following directories and files are added.  

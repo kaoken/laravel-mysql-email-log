@@ -2,7 +2,7 @@
 Laravelで扱うログをMysqlに保存し、指定レベル以上の場合メールを送信する。
 
 [![Travis](https://img.shields.io/travis/rust-lang/rust.svg)]()
-[![composer version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
+[![composer version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 [![licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 [![laravel version](https://img.shields.io/badge/Laravel%20version-≧5.5-red.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 
@@ -119,7 +119,7 @@ composer install kaoken/laravel-mysql-email-log
 
 ### コマンドの実行
 ```bash
-php artisan vendor:publish --tag=mysql_email_log
+php artisan vendor:publish --tag=mysql-email-log
 ```
 実行後、以下のディレクトリやファイルが追加される。   
 
