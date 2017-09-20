@@ -2,7 +2,7 @@
 Save logs handled by Laravel in Mysql, and send mail when it is over specified level.
 
 [![Travis](https://img.shields.io/travis/rust-lang/rust.svg)]()
-[![composer version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
+[![composer version](https://img.shields.io/badge/version-1.0.2-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 [![licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 [![laravel version](https://img.shields.io/badge/Laravel%20version-≧5.5-red.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 

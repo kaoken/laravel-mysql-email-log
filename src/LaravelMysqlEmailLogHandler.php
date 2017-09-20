@@ -69,7 +69,10 @@ class LaravelMysqlEmailLogHandler extends AbstractProcessingHandler
 
         $log->save();
 
+        //
+        if( $config['email'] !== true ) return;
 
+        // Preparation for sending mail.
         $lv = 'ERROR';
         if( !isset($config['email_send_level']) ) $lv = strtoupper($config['email_send_level']);
         if( !array_key_exists($lv,$this->levels))$lv = 'ERROR';
