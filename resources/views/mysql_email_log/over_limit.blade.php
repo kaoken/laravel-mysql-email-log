@@ -12,6 +12,8 @@
         $context = $o['exception']['xdebug_message'];
         if( preg_match("/^\n/", $context)){
             $context = nl2br(html_entity_decode($context));
+        }else if(preg_match("/^<tr>/", $context)){
+            $context = '<table class="table table-sm"><tbody>'.$context.'</tbody></table>';
         }else if(preg_match("/^</", $context)){
             ;
         }else{

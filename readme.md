@@ -2,7 +2,7 @@
 Save logs handled by Laravel in Mysql, and send mail when it is over specified level.
 
 [![Travis](https://img.shields.io/travis/rust-lang/rust.svg)]()
-[![composer version](https://img.shields.io/badge/version-1.0.2-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
+[![composer version](https://img.shields.io/badge/version-1.0.3-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 [![licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 [![laravel version](https://img.shields.io/badge/Laravel%20version-≧5.5-red.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 
@@ -149,17 +149,14 @@ php artisan migrate
 ```
 
 ### E-Mail
-In the case of config `config\app.php` of Setting above,
-
-`email_log`の`Kaoken\LaravelMysqlEmailLog\Mail\ConfirmationMailToUser::class`は、
-対象レベル以上のログメールとして使用する。
-テンプレートは、`views\vendor\mysql_email_log\log.blade.php`
-を使用している。アプリの仕様に合わせて変更すること。
+In the configuration `config\app.php` of the above setting,
+The `Kaoken\LaravelMysqlEmailLog\Mail\ConfirmationMailToUser::class` of `email_log` is used as the log mail of the target level or higher.
+The template uses `views\vendor\mysql_email_log\log.blade.php`. Change according to the specifications of the application.  
   
-`email_send_limit`の`Kaoken\LaravelMysqlEmailLog\Mail\ConfirmationMailToUser::class`は、
-対象レベル以上のログが送信制限に達したときに使用する。
-テンプレートは、`views\vendor\mysql_email_log\over_limit.blade.php`
-を使用している。アプリの仕様に合わせて変更すること。
+The `Kaoken\LaravelMysqlEmailLog\Mail\ConfirmationMailToUser::class` of `email_send_limit` is used when the log above the target level reaches the send limit.
+The template uses `views\vendor\mysql_email_log\over_limit.blade.php`. Change according to the specifications of the application.  
+
+
 
 
 
