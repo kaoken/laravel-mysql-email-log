@@ -20,8 +20,8 @@ class CreateLogTable extends Migration
                 $table->text('route');
                 $table->string('method',16);
                 $table->string('user_agent',512);
-                $table->text('message')->nullable();
-                $table->text('context')->nullable();
+                $table->mediumText('message')->nullable();
+                $table->mediumText('context')->nullable();
             });
             switch (strtolower(env('DB_CONNECTION')))
             {
