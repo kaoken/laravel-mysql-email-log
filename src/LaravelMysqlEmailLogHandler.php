@@ -22,10 +22,9 @@ class LaravelMysqlEmailLogHandler extends AbstractProcessingHandler
 
 
     /**
-     * 実装するハンドラーのログにレコードを書き込みます。
+     * Writes a record to the log of the handler to be implemented.
      *
      * @param  array $record
-     * @return array
      */
     protected function write(array $record)
     {

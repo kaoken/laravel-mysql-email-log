@@ -29,7 +29,7 @@ class Log extends Model
      * Decode JSON of character string state of 'context' and obtain by array
      * @return array|null
      */
-    public function &getJsonDecodeData()
+    public function getJsonDecodeData()
     {
         if($this->jsonDecodeData===null)
             $this->jsonDecodeData = json_decode($this->context,true);
