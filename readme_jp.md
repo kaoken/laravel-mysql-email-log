@@ -19,7 +19,7 @@ __コンテンツの一覧__
 **composer**:
 
 ```bash
-composer install kaoken/laravel-mysql-email-log
+composer require kaoken/laravel-mysql-email-log
 ```
 
 または、`composer.json`へ追加
