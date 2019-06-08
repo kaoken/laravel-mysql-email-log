@@ -1,23 +1,25 @@
 <?php
 namespace Kaoken\LaravelMysqlEmailLog;
 
-use Kaoken\LaravelMysqlEmailLog\Events\BeforeWriteLogEvent;
+
 use Carbon\Carbon;
 use Mail;
-use Monolog\Logger;
+use Kaoken\LaravelMysqlEmailLog\Events\BeforeWriteLogEvent;
 use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\Logger as Monolog;
+use Throwable;
 
 class LaravelMysqlEmailLogHandler extends AbstractProcessingHandler
 {
     protected $levels = [
-        'DEBUG'     => Logger::DEBUG,
-        'INFO'      => Logger::INFO,
-        'NOTICE'    => Logger::NOTICE,
-        'WARNING'   => Logger::WARNING,
-        'ERROR'     => Logger::ERROR,
-        'CRITICAL'  => Logger::CRITICAL,
-        'ALERT'     => Logger::ALERT,
-        'EMERGENCY' => Logger::EMERGENCY
+        'DEBUG'     => Monolog::DEBUG,
+        'INFO'      => Monolog::INFO,
+        'NOTICE'    => Monolog::NOTICE,
+        'WARNING'   => Monolog::WARNING,
+        'ERROR'     => Monolog::ERROR,
+        'CRITICAL'  => Monolog::CRITICAL,
+        'ALERT'     => Monolog::ALERT,
+        'EMERGENCY' => Monolog::EMERGENCY
     ];
 
 
@@ -28,7 +30,40 @@ class LaravelMysqlEmailLogHandler extends AbstractProcessingHandler
      */
     protected function write(array $record)
     {
-        $config = app()['config']["app.mysql_log"];
+        try{
+            $this->mysqlEmailLogWrite($record);
+        }
+        catch (Throwable $e){
+            tap($this->createEmergencyLogger(), function ($logger) use ($e) {
+                $logger->emergency('Unable to create configured logger. Using emergency logger.', [
+                    'exception' => $e,
+                ]);
+            });
+        }
+    }
+
+
+    /**
+     * Create an emergency log handler to avoid white screens of death.
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    protected function createEmergencyLogger()
+    {
+        return new \Illuminate\Log\Logger(
+            new Monolog(
+                'laravel',
+                [new \Monolog\Handler\StreamHandler(
+                    storage_path().'/logs/laravel.log',
+                    Monolog::DEBUG
+                )]
+            ),
+            app()["events"]
+        );
+    }
+
+    private function mysqlEmailLogWrite(array $record){
+        $config = app()['config']["logging.channels.mysql_log"];
 
         $record['pid'] = getmypid();
         $isLocal = false;
@@ -52,7 +87,7 @@ class LaravelMysqlEmailLogHandler extends AbstractProcessingHandler
         }
 
         $clLog = $config['model'];
-        $log = new ($clLog)();
+        $log = new $clLog();
 
         event(new BeforeWriteLogEvent($log,$record));
         $log->user_agent  = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT']:"";
