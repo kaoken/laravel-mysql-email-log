@@ -117,6 +117,13 @@ composer require kaoken/laravel-mysql-email-log
     ],
 ```
 
+#### ログ機能を有効にするには `.env` を修正
+下記のように修正をする
+```bash
+LOG_CHANNEL=mysql_log
+```
+
+
 ### コマンドの実行
 ```bash
 php artisan vendor:publish --tag=mysql-email-log
@@ -142,7 +149,7 @@ php artisan migrate
 ```
 
 ### メール
-上記の設定の `config\app.php`設定では、  
+上記の設定の `config\logging.php`設定では、  
 `email_log`の`Kaoken\LaravelMysqlEmailLog\Mail\ConfirmationMailToUser::class`は、
 対象レベル以上のログメールとして使用する。
 テンプレートは、`views\vendor\mysql_email_log\log.blade.php`

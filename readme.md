@@ -122,6 +122,11 @@ Send when e-mail transmission limit `max_email_send_count` is exceeded.
         'to' => 'hoge@hoge.com'
     ],
 ```
+#### Modify `.env` to enable logging
+Make corrections as follows
+```bash
+LOG_CHANNEL=mysql_log
+```
 
 ### Command
 ```bash
@@ -148,7 +153,7 @@ php artisan migrate
 ```
 
 ### E-Mail
-In the configuration `config\app.php` of the above setting,
+In the configuration `config\logging.php` of the above setting,
 The `Kaoken\LaravelMysqlEmailLog\Mail\ConfirmationMailToUser::class` of `email_log` is used as the log mail of the target level or higher.
 The template uses `views\vendor\mysql_email_log\log.blade.php`. Change according to the specifications of the application.  
   
