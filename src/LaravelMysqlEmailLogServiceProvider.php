@@ -39,16 +39,4 @@ class LaravelMysqlEmailLogServiceProvider extends ServiceProvider
             ], 'mysql-email-log');
         }
     }
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->app->configureMonologUsing(function($monolog) {
-            $monolog->setHandlers([new LaravelMysqlEmailLogHandler()]);
-            //$monolog->pushHandler(new LaravelMysqlEmailLogHandler());
-        });
-    }
 }

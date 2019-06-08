@@ -2,7 +2,7 @@
 Save logs handled by Laravel in Mysql, and send mail when it is over specified level.
 
 [![Travis](https://img.shields.io/travis/rust-lang/rust.svg)]()
-[![composer version](https://img.shields.io/badge/version-1.8.4-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
+[![composer version](https://img.shields.io/badge/version-1.8.5-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 [![licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 [![laravel version](https://img.shields.io/badge/Laravel%20version-≧5.8-red.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 
@@ -28,7 +28,7 @@ or, add `composer.json`
 ```json 
   "require": {
     ...
-    "kaoken/laravel-mysql-email-log":"^1.0"
+    "kaoken/laravel-mysql-email-log":"^1.8.5"
   }
 ```
 
@@ -89,9 +89,10 @@ with the driver name `mysql`.
   
   
 
-###  Add to **`config\app.php`** as follows:
+###  Add to **`config\logging.php`** as follows:
 
-- `connection` is the driver name for the data. See `config\database.php`.
+- `driver` is a `monolog`.
+- `handler` is a `Kaoken\LaravelMysqlEmailLog\LaravelMysqlEmailLogHandler::class`.
 - `model` is a log model.
 - `email` sends a mail according to` email_send_level` if it is `true`.
 In case of `false`, do not send anything.
@@ -105,15 +106,13 @@ Send when e-mail transmission limit `max_email_send_count` is exceeded.
 - `max_email_send_count`, the log e-mail that can be transmitted in one day.
  A simple warning mail is sent when the number exceeds the number of transmissions. See `email_send_level`.
 - `to` is the destination of the mail.
-  
-It is good to add it under the `'log_level' => env('APP_LOG_LEVEL', 'debug'),` of the `config\app.php` file.
 
 
 ```php  
-    'log_level' => env('APP_LOG_LEVEL', 'debug'),
     // Add
     'mysql_log' => [
-        'connection' => 'mysql_log',
+        'driver' => 'monolog',
+        'handler' => Kaoken\LaravelMysqlEmailLog\LaravelMysqlEmailLogHandler::class,
         'model' => Kaoken\LaravelMysqlEmailLog\Model\Log::class,
         'email' => true,
         'email_send_level' => 'ERROR',

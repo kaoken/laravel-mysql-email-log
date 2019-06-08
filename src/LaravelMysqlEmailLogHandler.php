@@ -52,7 +52,7 @@ class LaravelMysqlEmailLogHandler extends AbstractProcessingHandler
         }
 
         $clLog = $config['model'];
-        $log = new $clLog();
+        $log = new ($clLog)();
 
         event(new BeforeWriteLogEvent($log,$record));
         $log->user_agent  = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT']:"";

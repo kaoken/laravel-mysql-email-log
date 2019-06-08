@@ -2,7 +2,7 @@
 Laravelで扱うログをMysqlに保存し、指定レベル以上の場合メールを送信する。
 
 [![Travis](https://img.shields.io/travis/rust-lang/rust.svg)]()
-[![composer version](https://img.shields.io/badge/version-1.8.4-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
+[![composer version](https://img.shields.io/badge/version-1.8.5-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 [![licence](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 [![laravel version](https://img.shields.io/badge/Laravel%20version-≧5.8-red.svg)](https://github.com/kaoken/laravel-mysql-email-log)
 
@@ -27,7 +27,7 @@ composer require kaoken/laravel-mysql-email-log
 ```json 
   "require": {
     ...
-    "kaoken/laravel-mysql-email-log":"^1.0"
+    "kaoken/laravel-mysql-email-log":"^1.8.5"
   }
 ```
 
@@ -86,9 +86,10 @@ composer require kaoken/laravel-mysql-email-log
   
   
 
-### `config\app.php`へ追加する例
+### `config\logging.php`へ追加する例
 
-- `connection`は、データーばべーすドライバ名。`config\database.php`を参照。
+- `driver`は、常に`monolog`にする。
+- `handler`は、常に`Kaoken\LaravelMysqlEmailLog\LaravelMysqlEmailLogHandler::class`にする。
 - `model`は、ログモデル。
 - `email`は、`true`の場合、`email_send_level`に応じて、メールを送信する。`false`の場合、一切送信しない。
 - `email_send_level`は、ログレベルを指定して、指定したログレベル以上から送信する。優先順位は低いものから、`DEBUG`、`INFO`、`NOTICE`、`WARNING`、
@@ -100,13 +101,12 @@ composer require kaoken/laravel-mysql-email-log
 - `max_email_send_count`は、1日に送れるログメール。送信数を超えると簡単な警告メールが送られてくる。`email_send_level`参照。
 - `to`は、メールの送信先。
   
-`config\app.php` の `'log_level' => env('APP_LOG_LEVEL', 'debug'),`の下あたりに追加するのが良い。  
 
 ```php  
-    'log_level' => env('APP_LOG_LEVEL', 'debug'),
     // 追加
     'mysql_log' => [
-        'connection' => 'mysql_log',
+        'driver' => 'monolog',
+        'handler' => Kaoken\LaravelMysqlEmailLog\LaravelMysqlEmailLogHandler::class,
         'model' => Kaoken\LaravelMysqlEmailLog\Model\Log::class,
         'email' => true,
         'email_send_level' => 'ERROR',
